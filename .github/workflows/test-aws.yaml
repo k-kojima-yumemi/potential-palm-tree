@@ -1,18 +1,17 @@
 name: Test AWS
 
 on:
-    push:
+  push:
 
 jobs:
-    access:
-        runs-on: ubuntu-latest
-        environment: env1
-        permissions:
-            id-token: write
-        steps:
-            - 
-                name: access
-                uses: aws-actions/configure-aws-credentials@v2
-                with:
-                    aws-region: ${{vars.AWS_REGION}}
-                    role-to-assume: ${{secrets.TEST_SECRET}}
+  access:
+    runs-on: ubuntu-latest
+    environment: env1
+    permissions:
+      id-token: write
+    steps:
+      - name: access
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: ${{vars.AWS_REGION}}
+          role-to-assume: ${{secrets.TEST_SECRET}}
