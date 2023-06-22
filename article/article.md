@@ -1,4 +1,4 @@
-# TerraformでAWSのIAM Roleを作成しGitHubから使えるようにする
+# TerraformでAWSのIAM Roleを作成しGitHubまで一気に済ませる
 
 # 概要
 
@@ -289,3 +289,36 @@ Changes to Outputs:
 Note: You didn't use the -out option to save this plan, so Terraform can't
 guarantee to take exactly these actions if you run "terraform apply" now.
 ```
+
+Applyするとこのようにリソースが作成されます。
+
+![Environments.png](https://raw.githubusercontent.com/k-kojima-yumemi/potential-palm-tree/main/article/Environments.png)
+
+# GitHub Actionsの実行
+
+検証のため、以下でWorkflowを定義しました。
+
+```yaml
+name: Test AWS
+
+on:
+  push:
+
+jobs:
+  access:
+    runs-on: ubuntu-latest
+    environment: env1
+    permissions:
+      id-token: write
+    steps:
+      - name: access
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: ${{vars.AWS_REGION}}
+          role-to-assume: ${{secrets.TEST_SECRET}}
+```
+
+今回作成したEnvironment内でAssume RoleするだけのWorkflowです。
+このように正常に動作することが確認できます。
+
+![Workflow.png](https://raw.githubusercontent.com/k-kojima-yumemi/potential-palm-tree/main/article/Workflow.png)
