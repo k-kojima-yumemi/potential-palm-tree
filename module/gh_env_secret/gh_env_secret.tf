@@ -32,16 +32,16 @@ variable "aws_region" {
 }
 
 resource "github_actions_environment_secret" "gh_env_secret_arn" {
-  repository = var.gh_repo_name
-  environment = var.gh_repo_env_name
-  secret_name = var.gh_repo_env_secret_name
+  repository      = var.gh_repo_name
+  environment     = var.gh_repo_env_name
+  secret_name     = var.gh_repo_env_secret_name
   # Actually, arn is not sensitive value so just use plain text.
   plaintext_value = var.aws_iam_role_arn
 }
 
 resource "github_actions_environment_variable" "gh_env_variable_region" {
-  repository = var.gh_repo_name
-  environment = var.gh_repo_env_name
+  repository    = var.gh_repo_name
+  environment   = var.gh_repo_env_name
   variable_name = var.gh_repo_env_variable_name
-  value = var.aws_region
+  value         = var.aws_region
 }

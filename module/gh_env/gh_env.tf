@@ -7,7 +7,6 @@ terraform {
   }
 }
 
-
 variable "gh_repo_name" {
   type = string
 }
@@ -17,7 +16,7 @@ variable "gh_repo_env_name" {
 }
 
 resource "github_repository_environment" "gh_env" {
-  repository = var.gh_repo_name
+  repository  = var.gh_repo_name
   environment = var.gh_repo_env_name
 }
 

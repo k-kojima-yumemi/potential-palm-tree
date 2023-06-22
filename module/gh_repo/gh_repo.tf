@@ -8,12 +8,12 @@ terraform {
 }
 
 variable "gh_owner" {
-  type = string
+  type        = string
   description = "Repository owner"
 }
 
 variable "gh_repo_name" {
-  type = string
+  type        = string
   description = "Repository name"
 }
 

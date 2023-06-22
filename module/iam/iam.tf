@@ -2,7 +2,7 @@ variable "repo_full_name" {
   type = string
 }
 
-variable "token_arn" {
+variable "id_provider_arn" {
   type = string
 }
 
@@ -15,15 +15,15 @@ variable "role_name" {
 }
 
 resource "aws_iam_role" "iam" {
-  name = var.role_name
-  description = "Test role created in terrafrom"
+  name               = var.role_name
+  description        = "Test role created in terraform"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
       {
         "Effect" : "Allow",
         "Principal" : {
-          "Federated" : var.token_arn
+          "Federated" : var.id_provider_arn
         },
         "Action" : "sts:AssumeRoleWithWebIdentity",
         "Condition" : {

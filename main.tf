@@ -42,11 +42,11 @@ module "aws_id_provider" {
 }
 
 module "aws_iam" {
-  source        = "./module/iam"
-  repo_full_name = "${var.gh_owner}/${module.gh_repo.gh_repo_name}"
-  token_arn     = length(var.aws_id_provider_arn) == 0 ? module.aws_id_provider[0].token_arn : var.aws_id_provider_arn
-  repo_env_name = module.gh_env.gh_repo_env_name
-  role_name     = var.aws_role_name
+  source          = "./module/iam"
+  repo_full_name  = "${var.gh_owner}/${module.gh_repo.gh_repo_name}"
+  id_provider_arn = length(var.aws_id_provider_arn) == 0 ? module.aws_id_provider[0].id_provider_arn : var.aws_id_provider_arn
+  repo_env_name   = module.gh_env.gh_repo_env_name
+  role_name       = var.aws_role_name
 }
 
 module "gh_env_values" {
