@@ -1,4 +1,4 @@
-# TerraformでAWSのIAM Roleを作成しGitHubまで一気に済ませる
+# TerraformでAWSのIAM Roleを作成しGitHubの設定まで一気に済ませる
 
 # 概要
 
