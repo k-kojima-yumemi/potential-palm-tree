@@ -4,7 +4,7 @@
 
 TerraformではAWSなどのクラウドサービスのみならず、GitHubのリソースの管理もできます。
 本記事ではTerraformを使ってGitHub ActionsからAssume RoleできるIAM Roleの作成をします。
-また、そのRoleをGitHub Actionsのシークレットに登録するまでを一括で行えるTerraformの作成を行います。
+また、TerraformでGitHub Actionsのシークレットに作成したRoleのarnを登録するところまで一括でやります。
 
 ## 参考
 
@@ -14,6 +14,7 @@ TerraformではAWSなどのクラウドサービスのみならず、GitHubの�
   * TerraformでOpenID Providerを作成する部分はこの記事を参考に作成しました
 
 検証に使用したコードは以下のリポジトリにあります。
+
 https://github.com/k-kojima-yumemi/potential-palm-tree
 
 # 使用する環境
@@ -25,7 +26,7 @@ https://github.com/k-kojima-yumemi/potential-palm-tree
 
 ここではコードの例を紹介しますが、変数の定義は省略しています。
 ある程度推測できる命名にしているので、渡している情報の参考にしてください。
-また、上のリンクのリポジトリには変数の定義を含むコードがあるので、そちらも参照してください。
+上のリンクのリポジトリには変数の定義を含むコードがあるので、そちらも参照してください。
 
 ## 今回作成する構成
 
@@ -52,7 +53,7 @@ terraform {
 }
 ```
 
-IAM Roleを作成するためにawsのProvider, GitHubにアクセスするためにgithubのProviderを使用します。
+IAM Roleを作成するためにawsのProvider, GitHubのリソース作成のためにgithubのProviderを使用します。
 GitHubのProviderはdeprecatedになった昔のものもあるので、sourceを指定して正しいProviderを使用するようにしてください。
 
 GitHubのProviderのドキュメントはこちらです。
@@ -70,14 +71,17 @@ provider "github" {
 }
 ```
 GitHubのTokenはGitHub CLIから入手できるものを使用しています。
+実行時に`terraform plan -var "gh_token=$(gh auth token)"`のようにすることで挿入しています。
 `owner`はOptionalであるとドキュメントにはありますが、`owner`の値がセットされない泥沼にはまったため指定しています。
+操作したいリポジトリの所有者を入れておきます。
+`k-kojima-yumemi/potential-palm-tree`のリポジトリであれば、`k-kojima-yumemi`の部分が`owner`です。
 
 ## Moduleにする際の注意点
 
 再利用性を考えてModuleにする際にProviderで設定した内容が反映されずハマってしまうポイントがあります。
 
 Module側でProviderを指定せずにGitHubのリソースを参照したり作成すると、deprecatedである`hashicorp/github`が使われてしまいます。
-その場合最初に設定したProviderの内容が別のProviderの情報として扱われてしまうため、設定した項目がModule内では反映されなくなってしまいます。
+その場合、最初に設定したProviderの内容が別のProviderの情報として扱われてしまうため、設定した項目がModule内では反映されなくなってしまいます。
 そのためModuleのリソースを定義するファイルに以下の要素を指定することでProviderがずれてしまう問題を解決しています。
 
 ```terraform
@@ -91,7 +95,7 @@ terraform {
 }
 ```
 
-`terraform providers`を実行した際に、githubのProviderがdeprecatedであるメッセージがでた際にはこの現象が起こっている可能性があります。
+`terraform providers`を実行した際に、githubのProviderがdeprecatedであるメッセージが出た際にはこの現象が起こっている可能性があります。
 
 ## Environmentsの作成
 
