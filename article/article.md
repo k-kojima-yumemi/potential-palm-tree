@@ -1,9 +1,9 @@
-# TerraformでAWSのIAM Roleを作成しGitHubの設定まで一気に済ませる
+# TerraformでAWSのOIDCできるIAM Roleを作成しGitHubの設定まで一気に済ませる
 
 # 概要
 
 TerraformではAWSなどのクラウドサービスのみならず、GitHubのリソースの管理もできます。
-本記事ではTerraformを使ってGitHub ActionsからAssume RoleできるIAM Roleの作成をします。
+本記事ではTerraformを使ってGitHub ActionsからOpenID ConnectでAssume RoleできるIAM Roleの作成をします。
 また、TerraformでGitHub Actionsのシークレットに作成したRoleのarnを登録するところまで一括でやります。
 
 ## 参考
